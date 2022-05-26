@@ -5,7 +5,7 @@ const routes = [
         method: 'GET',
         path: '/notes',
         handler: (request, h) => {
-
+            return 'ini catatan';
         }
     }, 
     {
