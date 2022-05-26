@@ -1,9 +1,8 @@
 const notes = require('./notes.js');
 const { nanoid } = require('nanoid');
-const { response } = require('@hapi/hapi/lib/validation');
 
 const addNoteHandler = (req, h) => {
-    const { title, tag, body } = req.payload;
+    const { title, tags, body } = req.payload;
 
     const id = nanoid(16);
     const createAt = new Date().toISOString();
@@ -11,7 +10,7 @@ const addNoteHandler = (req, h) => {
 
     const newNote = { 
         title, 
-        tag, 
+        tags, 
         body,
         id,
         createAt,
@@ -24,7 +23,7 @@ const addNoteHandler = (req, h) => {
 
     if (isSucces) {
         const response = h.response({
-            staus: 'Success',
+            status: 'Success',
             message: 'Catatan berhasil ditambahkan',
             data: {
                 noteId: id,
@@ -35,11 +34,40 @@ const addNoteHandler = (req, h) => {
     }
 
     const response = h.response({
-        staus: 'Failed',
+        status: 'Failed',
         message: 'Catatan gagal ditambahkan',
     });
     response.code(500);
     return response;
 }
 
-module.exports = { addNoteHandler };
+const getAllNotesHandler = () => ({
+    status: 'Success',
+    data: {
+        notes,
+    },
+});
+
+const getNotesByIdHandler = (req, h) => {
+    const { id } = req.params;
+
+    const note = notes.filter(note => note.id === id)[0];
+
+    if (note != undefined){
+        return{
+            status: 'success',
+            data:{
+                note,
+            },
+        };
+    };
+
+    const response = h.response({
+        status: 'fail',
+        message: 'Catatan tidak ditemukan',
+    });
+    response.code(404);
+    return response;
+};
+
+module.exports = { addNoteHandler, getAllNotesHandler, getNotesByIdHandler };
