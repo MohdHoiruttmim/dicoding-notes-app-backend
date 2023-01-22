@@ -122,12 +122,12 @@ const deleteNoteByIdHandler = (req, h) => {
 
         response.code(200);
         return response;
-    }
+    };
 
     const response = h.response({
         status: "fail",
         message: "Data tidak ditemukan",
-    })
+    });
 
     response.code(404);
     return response;
