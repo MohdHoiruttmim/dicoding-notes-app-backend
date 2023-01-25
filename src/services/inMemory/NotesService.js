@@ -23,7 +23,9 @@ class NoteService{
 
       const isSuccess = this._notes.filter((note) => note.id === id).length > 0;
 
-      if(!isSuccess) return new Error("Catatan gagal ditambahkan");
+      if(!isSuccess){
+        throw new Error("Catatan gagal ditambahkan");
+      } 
 
       return id;
     }
@@ -35,7 +37,9 @@ class NoteService{
     getNoteById(id){
       const note = this._notes.filter((note) => note.id === id)[0];
 
-      if(!note) return new Error("Catatan tidak ditemukan");
+      if(!note){
+        throw new Error("Catatan tidak ditemukan");
+      } 
 
       return note;
     }
@@ -43,7 +47,9 @@ class NoteService{
     editNoteById(id, { title, body, tags }){
       const index = this._notes.findIndex((note) => note.id === id);
 
-      if(index === -1) return new Error("Gagal memperbarui catatan. Id tidak ditemukan");
+      if(index === -1){
+        throw new Error("Gagal memperbarui catatan. Id tidak ditemukan"); 
+      }
 
       const updateAt = new Date().toISOString();
 
@@ -59,8 +65,9 @@ class NoteService{
     deleteNoteById(id){
       const index = this._notes.findIndex((note) => note.id === id);
 
-      if(index === -1) return new Error("Catatan gagal dihapus. Id tidak ditemukan");
-
+      if(index === -1){
+        throw new Error("Catatan gagal dihapus. Id tidak ditemukan");
+      }
       this._notes.splice(index, 1);
     }
 }

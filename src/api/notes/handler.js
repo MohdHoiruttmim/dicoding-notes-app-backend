@@ -1,20 +1,29 @@
+// const NoteService = require("../../services/inMemory/NotesService");
+// const noteService = new NoteService();
+
 class NotesHandler{
   constructor(service){
     this._service = service;
+    this.postNoteHandler = this.postNoteHandler.bind(this);
+    this.getNotesHandler = this.getNotesHandler.bind(this);
+    this.getNoteByIdHandler = this.getNoteByIdHandler.bind(this);
+    this.putNoteByIdHandler = this.putNoteByIdHandler.bind(this);
+    this.deleteNoteByIdHandler = this.deleteNoteByIdHandler.bind(this);
   }
 
   getNotesHandler(request, h){
     try{
+      // const notes = noteService.getNotes();
       const notes = this._service.getNotes();
       return {
-        satatus: 'success',
+        status: 'Success',
         data: {
           notes,
         },
       };
     } catch(error){
       const response = h.response({
-        satatus: 'fail',
+        status: 'fail',
         message: error.message,
       });
       
@@ -30,7 +39,7 @@ class NotesHandler{
       const noteId = this._service.addNote({ title, body, tags });
   
       const response = h.response({
-        satatus: 'success',
+        status: 'Success',
         message: 'Catatan berhasil ditambahkan',
         data: {
           noteId,
@@ -41,7 +50,7 @@ class NotesHandler{
       return response;
     } catch(error){
       const response = h.response({
-        satatus: 'fail',
+        status: 'fail',
         message: error.message,
       });
       
@@ -57,7 +66,7 @@ class NotesHandler{
       const note = this._service.getNoteById(id);
 
       const response = h.response({
-        status: 'success',
+        status: 'Success',
         data: {
           note,
         }
@@ -82,7 +91,7 @@ class NotesHandler{
       this._service.editNoteById(id, request.payload);
 
       const response = h.response({
-        satatus: 'success',
+        status: 'Success',
         message: 'Catatan berhasil diperbarui',
       });
 
@@ -105,7 +114,7 @@ class NotesHandler{
       this._service.deleteNoteById(id);
 
       const response = h.response({
-        satatus: 'success',
+        status: 'Success',
         message: 'Catatan berhasil dihapus',
       });
 
@@ -113,10 +122,10 @@ class NotesHandler{
       return response;
     } catch(error){
     const response = h.response({
-      satatus: 'fail',
+      status: 'fail',
       message: error.message,
     });
-    
+
     response.code(404);
     return response;
     }

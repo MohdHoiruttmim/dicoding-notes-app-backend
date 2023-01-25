@@ -1,9 +1,7 @@
 const NotesHandler = require('./handler');
 const routes = require('./routes');
 
-'use strict';
-
-module.expors = {
+module.exports = {
   name: 'notes',
   version: '1.0.0',
   register: async (server, { service }) => {
