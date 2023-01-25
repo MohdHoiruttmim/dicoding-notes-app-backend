@@ -1,8 +1,9 @@
 const { nanoid } = require("nanoid");
+const notes = require("./dummyNotes");
 
 class NoteService{
     constructor(){
-      this._notes = [];
+      this._notes = notes;
     }
 
     addNote({ title, body, tags }){
