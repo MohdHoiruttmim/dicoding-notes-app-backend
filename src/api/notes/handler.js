@@ -1,6 +1,8 @@
 // const NoteService = require("../../services/inMemory/NotesService");
 // const noteService = new NoteService();
 
+const ClientError = require("../../exceptions/ClientError");
+
 class NotesHandler{
   constructor(service, validator){
     this._service = service;
@@ -25,7 +27,7 @@ class NotesHandler{
     } catch(error){
       const response = h.response({
         status: 'fail',
-        message: error.message,
+        message: 'Maaf, terjadi kesalahan pada server kami.',
       });
       
       response.code(500);
@@ -51,15 +53,23 @@ class NotesHandler{
       response.code(201);
       return response;
     } catch(error){
-      const response = h.response({
-        status: 'fail',
-        message: error.message,
-      });
-      
-      response.code(400);
-      return response;
-    }
+      if (error instanceof ClientError){
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
 
+        response.code(error.statusCode);
+        return response;
+      }
+    }
+    const response = h.response({
+      status: 'fail',
+      message: 'Maaf, terjadi kesalahan pada server kami.',
+    });
+    
+    response.code(500);
+    return response;
     }
 
   getNoteByIdHandler(request, h){
@@ -77,14 +87,23 @@ class NotesHandler{
       response.code(200);
       return response;
     }catch(error){
-      const response = h.response({
-        satatus: 'fail',
-        message: error.message,
-      });
-      
-      response.code(404);
-      return response;
+      if (error instanceof ClientError){
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+
+        response.code(error.statusCode);
+        return response;
+      }
     }
+    const response = h.response({
+      satatus: 'fail',
+      message: 'Maaf, terjadi kesalahan pada server kami.',
+    });
+    
+    response.code(500);
+    return response;
   }
   
   putNoteByIdHandler(request, h){
@@ -101,14 +120,24 @@ class NotesHandler{
       response.code(200);
       return response;
     } catch(error){
+      if (error instanceof ClientError){
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+
+        response.code(error.statusCode);
+        return response;
+      }
+    }
+    console.log(error)
     const response = h.response({
       status: 'fail',
-      message: error.message,
+      message: 'Maaf, terjadi kesalahan pada server kami.',
     });
 
-    response.code(404);
+    response.code(500);
     return response;
-  }
 }
 
   deleteNoteByIdHandler(request, h){
@@ -124,14 +153,23 @@ class NotesHandler{
       response.code(200);
       return response;
     } catch(error){
+      if (error instanceof ClientError){
+        const response = h.response({
+          status: 'fail',
+          message: error.message,
+        });
+
+        response.code(error.statusCode);
+        return response;
+      }
+    }
     const response = h.response({
       status: 'fail',
-      message: error.message,
+      message: 'Maaf, terjadi kesalahan pada server kami.',
     });
 
-    response.code(404);
+    response.code(500);
     return response;
-    }
   }
 
 }
