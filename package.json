@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon ./src/server.js",
     "dev": "supervisor ./src/server.js",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "migrate": "node-pg-migrate"
   },
   "keywords": [],
   "author": "",
@@ -19,8 +20,11 @@
   },
   "dependencies": {
     "@hapi/hapi": "^20.2.2",
+    "dotenv": "^16.0.3",
     "joi": "^17.7.0",
     "nanoid": "^3.3.4",
+    "node-pg-migrate": "^6.2.2",
+    "pg": "^8.9.0",
     "supervisor": "^0.12.0"
   }
 }
