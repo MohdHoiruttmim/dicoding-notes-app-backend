@@ -1,5 +1,6 @@
 const Hapi = require("@hapi/hapi");
 const notes = require("./api/notes");
+const ClientError = require("./exceptions/ClientError");
 const NoteService = require("./services/postgres/NotesService");
 // const NoteService = require("./services/inMemory/NotesService");
 const NotesValidator = require("./validator/notes");
@@ -24,6 +25,21 @@ const init = async () => {
       service: noteService,
       validator: NotesValidator,
     }
+  });
+
+  await server.ext("onPreResponse", (request, h) => {
+    const { response } = request;
+
+    if (response instanceof ClientError) {
+    const newResponse = h.response({
+      status: "fail",
+      message: response.message,
+    });
+    newResponse.code(response.statusCode);
+    return newResponse;
+    }
+
+    return response.continue || response;
   });
 
   await server.start();
