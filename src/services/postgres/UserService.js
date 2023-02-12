@@ -1,5 +1,6 @@
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
+const bcrypt = require('bcrypt');
 const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
@@ -18,13 +19,12 @@ class UserService{
       text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id',
       values: [userId, username, hashedPassword, fullname],
     }
-    const { rows } = this._pool.query(query);
-
-    if (!rows.length){
+    const result  = await this._pool.query(query);
+    if (!result.rows.length){
       throw new InvariantError('Gagal menambahkan user');
     }
 
-    return rows[0].id;
+    return result.rows[0].id;
   };
 
   async getUserById(id) {
@@ -48,9 +48,8 @@ class UserService{
     };
 
     const { rows } = await this._pool.query(query);
-
-    if (!rows.length){
-      throw new InvariantError('Gagal menambahkan user. Username sudah digunakan');
+    if (rows.length === 1){
+      throw new InvariantError('Gagal menambahkan user. Username sudah digunakan.');
     }
   };
 }
