@@ -3,3 +3,4 @@ test.js
 .env
 .prod.env
 test/testing.js
+flow-diagrams.drawio
